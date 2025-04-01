@@ -7,7 +7,7 @@ import traceback
 
 # Safe import của logger
 try:
-    from utils.logger import logger
+    from learning_framework.utils.logger import logger
 except ImportError:
     import logging
     logger = logging.getLogger(__name__)

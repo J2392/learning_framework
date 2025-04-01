@@ -11,7 +11,7 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from config import Config
-from utils.logger import setup_logger
+from learning_framework.utils.logger import setup_logger
 
 # Setup logger
 logger = setup_logger(__name__)

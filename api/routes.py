@@ -1,85 +1,65 @@
 """
-API routes for the application
+API Routes for learning framework
 """
-
-from flask import Blueprint, request, jsonify, current_app
-from typing import Dict, Any
-import asyncio
+from flask import Blueprint, request, jsonify
 import os
+import logging
 import json
 import datetime
-from functools import wraps
-from config import Config
+import asyncio
 from analyzers.perplexity_analyzer import PerplexityAnalyzer
+from utils.logger import setup_logger
 
-api = Blueprint('api', __name__)
+# Khởi tạo blueprint và logger
+api_bp = Blueprint('api', __name__, url_prefix='/api')
+logger = setup_logger('api', os.path.join(os.path.dirname(os.path.dirname(__file__)), 'logs'))
 
-@api.route('/analyze', methods=['POST'])
+@api_bp.route('/analyze', methods=['POST'])
 async def analyze():
-    """
-    Handle analysis requests
-    """
+    """API endpoint for text analysis"""
     try:
-        # Ensure we have JSON data
+        # Validate request
         if not request.is_json:
-            current_app.logger.error("Invalid content type")
             return jsonify({
                 'error': 'Content-Type must be application/json'
             }), 415
-
+                
         data = request.get_json()
-        
-        if not data or 'text' not in data:
-            current_app.logger.error("No text provided")
+        text = data.get('text', '').strip()
+        methods = data.get('methods', ['all'])
+            
+        if not text:
             return jsonify({
-                'error': 'No text provided'
+                'error': 'Text content is required'
             }), 400
-
-        # Process the analysis request
+                
+        # Initialize analyzer
         try:
-            text = data['text']
-            methods = data.get('methods', ['all'])
-            use_ai = data.get('use_ai', True)
-
-            # Log analysis start
-            current_app.logger.info(f"Starting analysis for methods: {methods}")
-
-            # Perform analysis with timeout
-            try:
-                analyzer = PerplexityAnalyzer()
-                results = await analyzer.analyze(text)
-                
-                if not results:
-                    raise ValueError("Analysis returned no results")
-                
-                # Save results for later retrieval
-                result_id = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-                results_dir = os.path.join(Config.RESULTS_DIR)
-                os.makedirs(results_dir, exist_ok=True)
-                
-                with open(os.path.join(results_dir, f"{result_id}.json"), 'w') as f:
-                    json.dump(results, f)
-                
-                # Add ID to results
-                results['id'] = result_id
-                
-                current_app.logger.info(f"Analysis completed successfully. Result ID: {result_id}")
-                return jsonify(results)
-
-            except asyncio.TimeoutError:
-                current_app.logger.error("Analysis timed out")
-                return jsonify({
-                    'error': 'Analysis timed out. Please try with shorter text.'
-                }), 504
-
-        except Exception as e:
-            current_app.logger.error(f"Analysis error: {str(e)}")
+            analyzer = PerplexityAnalyzer()
+        except ValueError as e:
+            logger.error(f"Configuration error: {str(e)}")
             return jsonify({
-                'error': f'Analysis failed: {str(e)}'
-            }), 500
-
+                'error': f"API configuration error: {str(e)}",
+                'help': "Please check your .env file and ensure PERPLEXITY_API_KEY is set correctly"
+            }), 503
+                
+        # Perform analysis
+        try:
+            results = await analyzer.analyze(text)
+            
+            # Save results if needed
+            result_id = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+            results_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'results')
+            os.makedirs(results_dir, exist_ok=True)
+            
+            with open(os.path.join(results_dir, f"{result_id}.json"), 'w') as f:
+                json.dump(results, f)
+            
+            return jsonify(results)
+        except Exception as e:
+            logger.error(f"Analysis error: {str(e)}")
+            return jsonify({'error': str(e)}), 500
+                
     except Exception as e:
-        current_app.logger.error(f"Request processing error: {str(e)}")
-        return jsonify({
-            'error': 'Internal server error'
-        }), 500
+        logger.error(f"API error: {str(e)}")
+        return jsonify({'error': str(e)}), 500

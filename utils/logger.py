@@ -1,55 +1,36 @@
-# utils/logger.py
 """
-Logging configuration
+Logger setup module
 """
-
 import logging
 import os
-from logging.handlers import RotatingFileHandler
-from typing import Optional
 
-def setup_logger(name: str = __name__, 
-                log_file: Optional[str] = None,
-                level: int = logging.DEBUG) -> logging.Logger:
-    """
-    Set up logger with consistent configuration
-    """
-    # Create logger
+def setup_logger(name, log_dir=None):
+    """Setup and configure a logger"""
     logger = logging.getLogger(name)
-    logger.setLevel(level)
-
-    # Create formatters
-    detailed_formatter = logging.Formatter(
+    logger.setLevel(logging.DEBUG)
+    
+    # Prevent duplicate handlers
+    if logger.handlers:
+        return logger
+    
+    # Formatter for logs
+    formatter = logging.Formatter(
         '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     )
-    simple_formatter = logging.Formatter(
-        '%(levelname)s - %(message)s'
-    )
-
-    # Create console handler
+    
+    # Console handler
     console_handler = logging.StreamHandler()
-    console_handler.setLevel(logging.INFO)
-    console_handler.setFormatter(simple_formatter)
+    console_handler.setFormatter(formatter)
     logger.addHandler(console_handler)
-
-    # Create file handler if log file specified
-    if log_file:
-        # Ensure logs directory exists
-        os.makedirs(os.path.dirname(log_file), exist_ok=True)
-        
-        file_handler = RotatingFileHandler(
-            log_file,
-            maxBytes=1024 * 1024,  # 1MB
-            backupCount=5
+    
+    # File handler if log_dir is provided
+    if log_dir:
+        os.makedirs(log_dir, exist_ok=True)
+        file_handler = logging.FileHandler(
+            os.path.join(log_dir, f"{name}.log"),
+            encoding="utf-8"
         )
-        file_handler.setLevel(logging.DEBUG)
-        file_handler.setFormatter(detailed_formatter)
+        file_handler.setFormatter(formatter)
         logger.addHandler(file_handler)
-
+    
     return logger
-
-# Create default logger
-logger = setup_logger(
-    'learning_framework',
-    os.path.join('logs', 'app.log')
-)

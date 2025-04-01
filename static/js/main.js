@@ -45,12 +45,7 @@ document.getElementById('analyze-form')?.addEventListener('submit', function(e) 
         },
         body: JSON.stringify(payload)
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`Network response error: ${response.status}`);
-        }
-        return response.json();
-    })
+    .then(response => response.json())
     .then(data => {
         if (data.error) {
             console.error('Error from server:', data.error);
@@ -64,7 +59,7 @@ document.getElementById('analyze-form')?.addEventListener('submit', function(e) 
         window.location.href = `/analyze?id=${data.id || 'latest'}`;
     })
     .catch(error => {
-        console.error('Error during analysis:', error);
+        console.error('Error:', error);
         alert('Error analyzing text. Please try again.');
         
         // Reset form state

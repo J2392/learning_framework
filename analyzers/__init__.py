@@ -4,14 +4,10 @@
 Analyzer module initialization
 """
 
-# Expose main classes
-from .text_analyzer import TextAnalyzer
+# Chỉ import PerplexityAnalyzer
 from .perplexity_analyzer import PerplexityAnalyzer
 
 # Version
 __version__ = "0.1.0"
 
-__all__ = [
-    'TextAnalyzer',
-    'PerplexityAnalyzer'
-]
+__all__ = ['PerplexityAnalyzer']

@@ -18,6 +18,9 @@ class Config:
     
     # API Keys
     PERPLEXITY_API_KEY = os.getenv('PERPLEXITY_API_KEY')
+    if PERPLEXITY_API_KEY:
+        if not PERPLEXITY_API_KEY.startswith('pplx-'):
+            raise ValueError("Invalid API key format - must start with 'pplx-'")
     
     # Logging
     LOG_LEVEL = os.getenv('LOG_LEVEL', 'DEBUG')
@@ -31,20 +34,24 @@ class Config:
     CACHE_ENABLED = CACHE_ENABLED
     
     # API
-    API_TIMEOUT = 30
+    API_TIMEOUT = int(os.getenv('API_TIMEOUT', '60'))
+    API_MAX_RETRIES = int(os.getenv('API_MAX_RETRIES', '3'))
     MAX_CONTENT_LENGTH = 1 * 1024 * 1024  # 1MB
     
     # Text Analysis
     MAX_TEXT_SIZE = 50000  # Maximum text size in characters
     DEFAULT_LANGUAGE = 'en'  # Default language for analysis
     
-    # Perplexity API
-    PERPLEXITY_BASE_URL = "https://api.perplexity.ai/v1"
-    PERPLEXITY_MODEL = "mixtral-8x7b-instruct"
+    # Perplexity API - API endpoint URL
+    PERPLEXITY_BASE_URL = "https://api.perplexity.ai/chat/completions"
+    PERPLEXITY_MODEL = os.getenv('PERPLEXITY_MODEL', 'sonar-pro')
     
     # Results Storage
     RESULTS_DIR = 'results'
 
+    # Add a development mode flag
+    DEVELOPMENT_MODE = False
+    
     @staticmethod
     def init_app(app):
         """Initialize application configuration"""
@@ -55,3 +62,14 @@ class Config:
         # Create necessary directories
         os.makedirs(Config.CACHE_DIR, exist_ok=True)
         os.makedirs(Config.RESULTS_DIR, exist_ok=True)
+
+    @staticmethod
+    def validate_config():
+        """Validate all required configuration"""
+        if not Config.PERPLEXITY_API_KEY:
+            raise ValueError("Missing PERPLEXITY_API_KEY in .env file")
+
+    @staticmethod
+    def use_mock_api():
+        """Check if we should use mock API instead of real API"""
+        return Config.DEVELOPMENT_MODE or not Config.PERPLEXITY_API_KEY.startswith('pplx-')

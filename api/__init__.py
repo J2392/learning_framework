@@ -1,9 +1,7 @@
-# api/__init__.py
+"""
+API package
+"""
+from flask import Blueprint
+from .routes import api_bp
 
-"""API package initialization"""
-from .routes import api
-
-__all__ = ['api']
-
-# Version
-__version__ = "0.1.0"
+__all__ = ['api_bp']
