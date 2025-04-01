@@ -1,0 +1,267 @@
+/**
+ * main.js - DEPRECATED
+ * 
+ * This file is no longer in use and has been replaced by app.js.
+ * It is kept for reference purposes only.
+ * Please use app.js for all JavaScript functionality.
+ * 
+ * Last updated: [31/03/2025]
+ */
+
+// Original code below this line
+// ...
+// static/js/main.js
+// Display analysis results
+function displayResults(data) {
+    console.log('Displaying results:', data);
+    
+    // Display key concepts
+    const conceptsDisplay = document.getElementById('concepts-display');
+    if (conceptsDisplay) {
+        conceptsDisplay.innerHTML = '';
+        if (data.concepts && data.concepts.length > 0) {
+            data.concepts.forEach(concept => {
+                const badge = document.createElement('div');
+                badge.className = 'concept-badge';
+                badge.textContent = concept;
+                conceptsDisplay.appendChild(badge);
+            });
+        } else {
+            conceptsDisplay.innerHTML = '<p>No key concepts identified</p>';
+        }
+    }
+
+    // Display context
+    const contextDisplay = document.getElementById('context-display');
+    if (contextDisplay) {
+        contextDisplay.textContent = data.context || 'Not identified';
+    }
+
+    // Display complexity (if available)
+    const complexityDisplay = document.getElementById('complexity-display');
+    if (complexityDisplay && data.complexity) {
+        complexityDisplay.innerHTML = `
+            <p><strong>Total words:</strong> ${data.complexity.total_words || 'N/A'}</p>
+            <p><strong>Unique words:</strong> ${data.complexity.unique_words || 'N/A'}</p>
+            <p><strong>Average sentence length:</strong> ${data.complexity.avg_sentence_length ? data.complexity.avg_sentence_length.toFixed(1) : 'N/A'} words</p>
+        `;
+    }
+
+    // Display JSON Data
+    const jsonDisplay = document.getElementById('json-display');
+    if (jsonDisplay) {
+        jsonDisplay.innerHTML = syntaxHighlight(JSON.stringify(data, null, 2));
+    }
+
+    // Display Socratic Questions
+    const socraticDisplay = document.getElementById('socratic-display');
+    if (socraticDisplay) {
+        socraticDisplay.innerHTML = '';
+        // Check different data structures
+        if (data.socratic_questions) {
+            console.log('Found socratic_questions:', data.socratic_questions);
+            displaySocraticQuestions(data.socratic_questions, socraticDisplay);
+        } else if (data.methods && data.methods.socratic) {
+            console.log('Found methods.socratic:', data.methods.socratic);
+            displaySocraticQuestions(data.methods.socratic, socraticDisplay);
+        } else {
+            socraticDisplay.innerHTML = '<p>No Socratic questions</p>';
+            console.log('No Socratic questions found in data');
+        }
+    }
+
+    // Display Multi-level Explanations
+    const multilevelDisplay = document.getElementById('multilevel-display');
+    if (multilevelDisplay) {
+        multilevelDisplay.innerHTML = '';
+        if (data.multi_level_explanations) {
+            console.log('Found multi_level_explanations:', data.multi_level_explanations);
+            displayMultiLevelExplanations(data.multi_level_explanations, multilevelDisplay);
+        } else if (data.methods && data.methods.multi_level) {
+            console.log('Found methods.multi_level:', data.methods.multi_level);
+            displayMultiLevelExplanations(data.methods.multi_level, multilevelDisplay);
+        } else {
+            multilevelDisplay.innerHTML = '<p>No multi-level explanations</p>';
+            console.log('No multi-level explanations found in data');
+        }
+    }
+
+    // Display Practice Questions
+    const practiceDisplay = document.getElementById('practice-display');
+    if (practiceDisplay) {
+        practiceDisplay.innerHTML = '';
+        if (data.practice_questions) {
+            console.log('Found practice_questions:', data.practice_questions);
+            displayPracticeQuestions(data.practice_questions, practiceDisplay);
+        } else if (data.methods && data.methods.practice) {
+            console.log('Found methods.practice:', data.methods.practice);
+            displayPracticeQuestions(data.methods.practice, practiceDisplay);
+        } else {
+            practiceDisplay.innerHTML = '<p>No practice questions</p>';
+            console.log('No practice questions found in data');
+        }
+    }
+}
+
+// Function to display Socratic questions
+function displaySocraticQuestions(questions, container) {
+    // Check if questions is an object or an array
+    if (typeof questions === 'object' && !Array.isArray(questions)) {
+        // It's an object with question types
+        Object.entries(questions).forEach(([type, typeQuestions]) => {
+            const typeHeading = document.createElement('h5');
+            typeHeading.textContent = type.charAt(0).toUpperCase() + type.slice(1) + ' Questions';
+            container.appendChild(typeHeading);
+
+            const questionsList = document.createElement('ul');
+            if (Array.isArray(typeQuestions)) {
+                typeQuestions.forEach(question => {
+                    const listItem = document.createElement('li');
+                    // Check if question is a string or an object
+                    if (typeof question === 'string') {
+                        listItem.textContent = question;
+                    } else if (question && question.question) {
+                        listItem.textContent = question.question;
+                    } else if (question && typeof question === 'object') {
+                        listItem.textContent = JSON.stringify(question);
+                    }
+                    questionsList.appendChild(listItem);
+                });
+            } else {
+                // Handle unexpected structure
+                const listItem = document.createElement('li');
+                listItem.textContent = 'Unexpected data structure: ' + JSON.stringify(typeQuestions);
+                questionsList.appendChild(listItem);
+            }
+            container.appendChild(questionsList);
+        });
+    } else if (Array.isArray(questions)) {
+        // It's a simple array of questions
+        const questionsList = document.createElement('ul');
+        questions.forEach(question => {
+            const listItem = document.createElement('li');
+            if (typeof question === 'string') {
+                listItem.textContent = question;
+            } else if (question && question.question) {
+                listItem.textContent = question.question;
+            } else if (question && typeof question === 'object') {
+                listItem.textContent = JSON.stringify(question);
+            }
+            questionsList.appendChild(listItem);
+        });
+        container.appendChild(questionsList);
+    } else {
+        // Unknown structure
+        container.innerHTML = '<p>Unable to display Socratic questions (unsupported data structure)</p>';
+        console.error('Unsupported Socratic questions data structure:', questions);
+    }
+}
+
+// Function to display Multi-level explanations
+function displayMultiLevelExplanations(explanations, container) {
+    // Check data structure
+    if (typeof explanations === 'object' && !Array.isArray(explanations)) {
+        // For each level (child, high_school, academic)
+        for (const level in explanations) {
+            const levelHeading = document.createElement('h5');
+            levelHeading.textContent = formatLevelName(level) + ' Level Explanations';
+            container.appendChild(levelHeading);
+            
+            const explanationsList = document.createElement('ul');
+            if (Array.isArray(explanations[level])) {
+                explanations[level].forEach(explanation => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = typeof explanation === 'string' ? explanation : JSON.stringify(explanation);
+                    explanationsList.appendChild(listItem);
+                });
+            } else {
+                const listItem = document.createElement('li');
+                listItem.textContent = 'Unexpected data structure: ' + JSON.stringify(explanations[level]);
+                explanationsList.appendChild(listItem);
+            }
+            container.appendChild(explanationsList);
+        }
+    } else if (Array.isArray(explanations)) {
+        // Handle array structure
+        const explanationsList = document.createElement('ul');
+        explanations.forEach(explanation => {
+            const listItem = document.createElement('li');
+            listItem.textContent = typeof explanation === 'string' ? explanation : JSON.stringify(explanation);
+            explanationsList.appendChild(listItem);
+        });
+        container.appendChild(explanationsList);
+    } else {
+        container.innerHTML = '<p>Unable to display multi-level explanations (unsupported data structure)</p>';
+        console.error('Unsupported Multi-level explanations data structure:', explanations);
+    }
+}
+
+// Function to display Practice questions
+function displayPracticeQuestions(questions, container) {
+    // Check data structure
+    if (typeof questions === 'object' && !Array.isArray(questions)) {
+        // For each level (beginner, intermediate, advanced)
+        for (const level in questions) {
+            const levelHeading = document.createElement('h5');
+            levelHeading.textContent = level.charAt(0).toUpperCase() + level.slice(1) + ' Level Questions';
+            container.appendChild(levelHeading);
+            
+            const questionsList = document.createElement('ul');
+            if (Array.isArray(questions[level])) {
+                questions[level].forEach(question => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = typeof question === 'string' ? question : JSON.stringify(question);
+                    questionsList.appendChild(listItem);
+                });
+            } else {
+                const listItem = document.createElement('li');
+                listItem.textContent = 'Unexpected data structure: ' + JSON.stringify(questions[level]);
+                questionsList.appendChild(listItem);
+            }
+            container.appendChild(questionsList);
+        }
+    } else if (Array.isArray(questions)) {
+        // Handle array structure
+        const questionsList = document.createElement('ul');
+        questions.forEach(question => {
+            const listItem = document.createElement('li');
+            listItem.textContent = typeof question === 'string' ? question : JSON.stringify(question);
+            questionsList.appendChild(listItem);
+        });
+        container.appendChild(questionsList);
+    } else {
+        container.innerHTML = '<p>Unable to display practice questions (unsupported data structure)</p>';
+        console.error('Unsupported Practice questions data structure:', questions);
+    }
+}
+
+// Helper function to format level names
+function formatLevelName(level) {
+    if (level === 'child') return 'Child';
+    if (level === 'high_school') return 'High School';
+    if (level === 'academic') return 'Academic';
+    return level.charAt(0).toUpperCase() + level.slice(1);
+}
+
+// Function to syntax highlight JSON
+function syntaxHighlight(json) {
+    if (typeof json != 'string') {
+        json = JSON.stringify(json, undefined, 2);
+    }
+    json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+        let cls = 'number';
+        if (/^"/.test(match)) {
+            if (/:$/.test(match)) {
+                cls = 'key';
+            } else {
+                cls = 'string';
+            }
+        } else if (/true|false/.test(match)) {
+            cls = 'boolean';
+        } else if (/null/.test(match)) {
+            cls = 'null';
+        }
+        return '<span class="' + cls + '">' + match + '</span>';
+    });
+}

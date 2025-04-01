@@ -1,0 +1,403 @@
+/* Custom styles for the Learning Framework application */
+
+/* Base styling */
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    padding: 0 20px;
+}
+
+/* Card styling */
+.card {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    border-top-left-radius: 0.5rem !important;
+    border-top-right-radius: 0.5rem !important;
+    font-weight: 600;
+    padding: 0.8rem 1.25rem;
+}
+
+.card-body {
+    padding: 1.25rem;
+}
+
+/* Badge styling */
+.badge {
+    font-weight: 500;
+    padding: 0.5em 0.8em;
+    border-radius: 0.25rem;
+}
+
+.ai-badge {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.ai-badge .badge {
+    padding: 0.4em 0.6em;
+    font-size: 0.75em;
+    vertical-align: middle;
+}
+
+.badge.bg-info {
+    background-color: #17a2b8 !important;
+    font-size: 0.7rem;
+}
+
+/* Concept badge styling */
+.concept-badge {
+    display: inline-block;
+    padding: 0.4em 0.8em;
+    margin: 0.2em;
+    background-color: #e9ecef;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #495057;
+    border-left: 3px solid #0d6efd;
+    transition: all 0.2s ease;
+}
+
+.concept-badge:hover {
+    background-color: #0d6efd;
+    color: #fff;
+}
+
+/* Cải thiện hiển thị khái niệm */
+#concepts-display .concept-badge {
+    background-color: #6f42c1;
+    color: white;
+    border-radius: 18px;
+    padding: 6px 12px;
+    margin: 5px;
+    font-size: 14px;
+    display: inline-block;
+    border-left: none;
+}
+
+/* Tab styling */
+.tab-content {
+    min-height: 300px;
+    padding: 1.25rem 0;
+}
+
+.nav-tabs {
+    border-bottom: 1px solid #dee2e6;
+}
+
+.nav-tabs .nav-link {
+    color: #495057;
+    font-weight: 500;
+    padding: 0.75rem 1rem;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: all 0.2s ease;
+}
+
+.nav-tabs .nav-link:hover {
+    border-color: transparent transparent #dee2e6 transparent;
+    color: #0d6efd;
+}
+
+.nav-tabs .nav-link.active {
+    color: #0d6efd;
+    font-weight: 600;
+    border-color: transparent transparent #0d6efd transparent;
+    background-color: transparent;
+}
+
+/* Tab pane styling */
+.tab-pane {
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    border-top: none;
+    border-radius: 0 0 0.25rem 0.25rem;
+}
+
+/* Button styling */
+.btn {
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.btn-primary:hover {
+    background-color: #0b5ed7;
+    border-color: #0a58ca;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+}
+
+/* Form control styling */
+.form-control {
+    border-radius: 0.25rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #ced4da;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-control:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.form-check-input:checked {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* List group styling */
+.list-group-item {
+    border-left: none;
+    border-right: none;
+    padding: 0.75rem 1.25rem;
+}
+
+.list-group-item:first-child {
+    border-top: none;
+}
+
+/* Results container styling */
+.results-container {
+    margin-top: 20px;
+}
+
+.results-container h3 {
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+/* Accordion styling */
+.accordion-item {
+    border-radius: 0.25rem;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.accordion-header {
+    margin-bottom: 0;
+}
+
+.accordion-button {
+    font-weight: 500;
+    padding: 1rem 1.25rem;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: rgba(13, 110, 253, 0.1);
+    color: #0d6efd;
+}
+
+.accordion-button:focus {
+    box-shadow: none;
+    border-color: rgba(0, 0, 0, 0.125);
+}
+
+/* Hiệu ứng hover cho các phần tử tương tác */
+.accordion-button:hover {
+    background-color: #f0f0f0;
+}
+
+/* JSON styling */
+pre {
+    background-color: #f5f5f5;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    overflow-x: auto;
+}
+
+/* JSON Syntax Highlighting */
+.json-key {
+    color: #007bff;
+}
+
+.json-string {
+    color: #28a745;
+}
+
+.json-number {
+    color: #fd7e14;
+}
+
+.json-boolean {
+    color: #dc3545;
+}
+
+.json-null {
+    color: #6c757d;
+}
+
+.json-mark {
+    color: #343a40;
+}
+
+/* Cải thiện hiển thị JSON */
+#json-display {
+    max-height: 500px;
+    overflow: auto;
+    font-family: "Fira Code", "Consolas", monospace;
+    font-size: 14px;
+    white-space: pre-wrap;
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 6px;
+    border: 1px solid #dee2e6;
+}
+
+/* Progress bar styling */
+.progress {
+    height: 1.25rem;
+    border-radius: 0.25rem;
+    background-color: #e9ecef;
+    overflow: hidden;
+}
+
+.progress-bar {
+    background-color: #0d6efd;
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.25rem;
+    text-align: center;
+    transition: width 0.6s ease;
+}
+
+/* Question and Answer styling */
+.question-type {
+    margin-top: 1.25rem;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #dee2e6;
+    color: #495057;
+    font-weight: 600;
+}
+
+.question-item {
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+    background-color: #f8f9fa;
+    border-radius: 0.25rem;
+    border-left: 3px solid #0d6efd;
+}
+
+.practice-question {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 0.25rem;
+    border: 1px solid #dee2e6;
+}
+
+.question-text {
+    margin-bottom: 0.5rem;
+}
+
+.answer-text {
+    padding: 0.75rem;
+    background-color: #fff;
+    border-radius: 0.25rem;
+    border: 1px solid #dee2e6;
+}
+
+/* Explanation section styling */
+.explanation-section {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.explanation-section:last-child {
+    border-bottom: none;
+}
+
+/* Cải thiện hiển thị câu hỏi và giải thích */
+#thinking .card {
+    margin-bottom: 15px;
+    border-left: 4px solid #0d6efd;
+}
+
+.question-type, .explanation-level {
+    font-weight: 600;
+    color: #0d6efd;
+    margin-bottom: 5px;
+}
+
+.question-item, .explanation-item {
+    padding: 12px;
+    border-left: 3px solid #0d6efd;
+    margin-bottom: 10px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+/* Loading indicator */
+#loading {
+    padding: 2rem 0;
+}
+
+/* Processing time display */
+#processing-time {
+    font-size: 0.8rem;
+    color: #6c757d;
+    margin-bottom: 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .card-header {
+        padding: 0.6rem 1rem;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .nav-tabs .nav-link {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.9rem;
+    }
+    
+    .concept-badge {
+        font-size: 0.8rem;
+    }
+}

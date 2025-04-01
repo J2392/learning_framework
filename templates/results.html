@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="results-container">
+    {% if results.error %}
+        <div class="error-message">
+            {{ results.error }}
+        </div>
+    {% endif %}
+
+    <!-- Socratic Questions -->
+    <div class="result-section">
+        <h3>Socratic Questions</h3>
+        {% if results.error %}
+            <div class="alert alert-warning">
+                Using default questions. Error: {{ results.error }}
+            </div>
+        {% endif %}
+        {% if results.socratic_questions %}
+            <ul class="socratic-questions">
+            {% for question in results.socratic_questions %}
+                <li>{{ question }}</li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No Socratic questions available</p>
+        {% endif %}
+    </div>
+
+    <!-- Multi-level Explanations -->
+    <div class="result-section">
+        <h3>Multi-level Explanations</h3>
+        {% if results.multilevel_explanations %}
+            <ul class="multilevel-explanations">
+            {% for explanation in results.multilevel_explanations %}
+                <li>{{ explanation }}</li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No multi-level explanations available</p>
+        {% endif %}
+    </div>
+
+    <!-- Practice Questions -->
+    <div class="result-section">
+        <h3>Practice Questions</h3>
+        {% if results.practice_questions %}
+            <ul class="practice-questions">
+            {% for question in results.practice_questions %}
+                <li>{{ question }}</li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No practice questions available</p>
+        {% endif %}
+    </div>
+
+    <!-- Bloom's Taxonomy Questions -->
+    <div class="result-section">
+        <h3>Bloom's Taxonomy Questions</h3>
+        {% if results.blooms_questions %}
+            <ul class="blooms-questions">
+            {% for question in results.blooms_questions %}
+                <li>{{ question }}</li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No Bloom's taxonomy questions available</p>
+        {% endif %}
+    </div>
+
+    <!-- Key Terms -->
+    <div class="result-section">
+        <h3>Key Terms</h3>
+        {% if results.key_terms %}
+            <ul class="key-terms">
+            {% for term in results.key_terms %}
+                <li>{{ term }}</li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No key terms available</p>
+        {% endif %}
+    </div>
+
+    <!-- Analogies -->
+    <div class="result-section">
+        <h3>Analogies & Examples</h3>
+        {% if results.analogies %}
+            <ul class="analogies">
+            {% for analogy in results.analogies %}
+                <li>{{ analogy }}</li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No analogies available</p>
+        {% endif %}
+    </div>
+
+    <!-- Summary -->
+    <div class="result-section">
+        <h3>Summary</h3>
+        {% if results.summary %}
+            <ul class="summary">
+            {% for point in results.summary %}
+                <li>{{ point }}</li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No summary available</p>
+        {% endif %}
+    </div>
+
+    <!-- Analysis Results -->
+    {% if results.analysis %}
+    <div class="result-section">
+        <h3>Analysis</h3>
+        <pre>{{ results.analysis | tojson(indent=2) }}</pre>
+    </div>
+    {% endif %}
+</div>
+{% endblock %} 
