@@ -8,6 +8,9 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
+# Global cache setting
+CACHE_ENABLED = os.getenv('CACHE_ENABLED', 'True').lower() == 'true'
+
 class Config:
     """Base configuration"""
     # Flask
@@ -25,6 +28,7 @@ class Config:
     CACHE_TYPE = 'filesystem'
     CACHE_DIR = 'cache'
     CACHE_DEFAULT_TIMEOUT = 300
+    CACHE_ENABLED = CACHE_ENABLED
     
     # API
     API_TIMEOUT = 30
@@ -37,6 +41,9 @@ class Config:
     # Perplexity API
     PERPLEXITY_BASE_URL = "https://api.perplexity.ai/v1"
     PERPLEXITY_MODEL = "mixtral-8x7b-instruct"
+    
+    # Results Storage
+    RESULTS_DIR = 'results'
 
     @staticmethod
     def init_app(app):
@@ -44,3 +51,7 @@ class Config:
         # Validate required config
         if not Config.PERPLEXITY_API_KEY:
             app.logger.warning("PERPLEXITY_API_KEY not set - API features will be disabled")
+        
+        # Create necessary directories
+        os.makedirs(Config.CACHE_DIR, exist_ok=True)
+        os.makedirs(Config.RESULTS_DIR, exist_ok=True)

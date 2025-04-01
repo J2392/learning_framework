@@ -5,7 +5,7 @@ Perplexity API integration
 
 from flask import Blueprint, request, jsonify
 from config import Config
-from analyzers.perplexity_analyzer import analyze_with_perplexity
+from analyzers.perplexity_analyzer import PerplexityAnalyzer
 
 perplexity_api = Blueprint('perplexity_api', __name__)
 
@@ -30,7 +30,8 @@ async def analyze():
         context = data.get('context', 'general')
 
         # Perform analysis
-        result = await analyze_with_perplexity(text, context)
+        analyzer = PerplexityAnalyzer()
+        result = await analyzer.analyze(text)
         
         if result.get('error'):
             return jsonify({

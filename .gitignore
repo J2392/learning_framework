@@ -43,7 +43,8 @@ cache/
 
 # IDE files
 .idea/
-.vscode/
+# Include .vscode settings for interpreter config
+# .vscode/ 
 *.sublime-project
 *.sublime-workspace
 

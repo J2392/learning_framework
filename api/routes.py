@@ -5,7 +5,12 @@ API routes for the application
 from flask import Blueprint, request, jsonify, current_app
 from typing import Dict, Any
 import asyncio
+import os
+import json
+import datetime
 from functools import wraps
+from config import Config
+from analyzers.perplexity_analyzer import PerplexityAnalyzer
 
 api = Blueprint('api', __name__)
 
@@ -32,8 +37,6 @@ async def analyze():
 
         # Process the analysis request
         try:
-            from learning_framework.analyzers.perplexity_analyzer import analyze_with_perplexity
-            
             text = data['text']
             methods = data.get('methods', ['all'])
             use_ai = data.get('use_ai', True)
@@ -43,12 +46,24 @@ async def analyze():
 
             # Perform analysis with timeout
             try:
-                results = await analyze_with_perplexity(text)
+                analyzer = PerplexityAnalyzer()
+                results = await analyzer.analyze(text)
                 
                 if not results:
                     raise ValueError("Analysis returned no results")
                 
-                current_app.logger.info("Analysis completed successfully")
+                # Save results for later retrieval
+                result_id = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+                results_dir = os.path.join(Config.RESULTS_DIR)
+                os.makedirs(results_dir, exist_ok=True)
+                
+                with open(os.path.join(results_dir, f"{result_id}.json"), 'w') as f:
+                    json.dump(results, f)
+                
+                # Add ID to results
+                results['id'] = result_id
+                
+                current_app.logger.info(f"Analysis completed successfully. Result ID: {result_id}")
                 return jsonify(results)
 
             except asyncio.TimeoutError:
