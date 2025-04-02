@@ -176,3 +176,8 @@ textarea {
     background-color: #f8f9fa;
     border-left: 4px solid #28a745;
 }
+
+/* Tìm và thay thế tên nếu được sử dụng trong CSS */
+.app-title::before {
+    content: "Dannv Learning Framework";
+}

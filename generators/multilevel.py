@@ -25,7 +25,7 @@ class MultilevelGenerator(BaseGenerator):
         
         Args:
             normalized_input: Normalized input data
-            
+        
         Returns:
             Dictionary of explanations by complexity level
         """

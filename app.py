@@ -36,6 +36,7 @@ from api.routes import api_bp
 app = Flask(__name__)
 CORS(app)
 app.config.from_object(Config)
+app.config['APP_NAME'] = 'Dannv Learning Framework'
 
 # Setup logging
 logger = setup_logger('app', os.path.join(os.path.dirname(__file__), 'logs'))

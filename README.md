@@ -1,6 +1,6 @@
-# Learning Framework with Perplexity API
+# Dannv Learning Framework
 
-An advanced learning tool that applies 7 thinking methods to any text, enhanced with AI capabilities through Perplexity API.
+A framework for analyzing educational content using AI, powered by Perplexity API.
 
 ## Features
 
