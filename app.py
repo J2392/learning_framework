@@ -149,11 +149,12 @@ async def analyze():
                     if key in AVAILABLE_GENERATORS:
                         try:
                             generator_fn = AVAILABLE_GENERATORS[key]
+                            # Truyền toàn bộ analysis_results vào generator
                             generated_content[key] = generator_fn(analysis_results)
                             logger.info(f"Successfully generated {key} content")
                         except Exception as e:
                             logger.error(f"Error generating {key} content: {str(e)}", exc_info=True)
-                            generated_content[key] = {"error": f"Failed to generate {key} content: {str(e)}"}
+                            generated_content[key] = [f"Error generating content: {str(e)}"]
                 
                 # Combine results
                 final_results = {
@@ -210,6 +211,28 @@ def get_default_results():
                      "Term 3: Contextual usage"],
         "summary": ["This text explores important concepts and their applications."]
     }
+
+def format_results_for_template(analysis_results, generated_content):
+    """Format results for template rendering"""
+    formatted = {}
+    
+    # Process key-value pairs from analysis_results
+    for key, value in analysis_results.items():
+        if isinstance(value, list):
+            formatted[key] = value
+        else:
+            formatted[key] = [str(value)]
+    
+    # Process generated content
+    for key, value in generated_content.items():
+        if isinstance(value, list):
+            formatted[key] = value
+        elif isinstance(value, dict) and "error" in value:
+            formatted[key] = [value["error"]]
+        else:
+            formatted[key] = [str(value)]
+    
+    return formatted
 
 if __name__ == '__main__':
     try:

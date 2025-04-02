@@ -1,39 +1,19 @@
 """
-Generators package
+Available generators for the learning framework
 """
 
-# Import các generators từ wrapped_generators
-from .wrapped_generators import generate_socratic_questions, generate_multilevels, generate_practice_questions
+from generators.questions_generator import generate_socratic_questions
+from generators.explanations_generator import generate_explanations
+from generators.practice_generator import generate_practice_questions
+from generators.blooms_generator import generate_blooms_questions
+from generators.key_terms_generator import generate_key_terms
+from generators.analogies_generator import generate_analogies
+from generators.summary_generator import generate_summary
 
-# Thêm các generators khác nếu có
-try:
-    from .blooms_generator import generate_blooms_questions
-except ImportError:
-    def generate_blooms_questions(*args, **kwargs): 
-        return ["Bloom's generator not available"]
-
-try:
-    from .key_terms_generator import generate_key_terms
-except ImportError:
-    def generate_key_terms(*args, **kwargs): 
-        return ["Key terms generator not available"]
-        
-try:
-    from .analogies_generator import generate_analogies
-except ImportError:
-    def generate_analogies(*args, **kwargs): 
-        return ["Analogies generator not available"]
-        
-try:
-    from .summary_generator import generate_summary
-except ImportError:
-    def generate_summary(*args, **kwargs): 
-        return ["Summary generator not available"]
-
-# Định nghĩa AVAILABLE_GENERATORS với các generators
+# Exported generators dictionary
 AVAILABLE_GENERATORS = {
-    "socratic": generate_socratic_questions,
-    "multilevel": generate_multilevels,
+    "questions": generate_socratic_questions,
+    "explanations": generate_explanations,
     "practice": generate_practice_questions,
     "blooms": generate_blooms_questions,
     "key_terms": generate_key_terms,
