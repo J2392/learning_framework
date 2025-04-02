@@ -62,45 +62,50 @@ class PerplexityAnalyzer:
         if not self.use_api:
             logger.warning("Using default responses instead of API")
             return {
+                "text": text,
+                "key_concepts": ["concept 1", "concept 2", "concept 3"],
+                "themes": ["theme 1", "theme 2"],
+                "entities": ["entity 1", "entity 2"],
+                "summary": self._get_default_result("summary"),
                 "questions": self._get_default_result("questions"),
                 "explanations": self._get_default_result("explanations"),
                 "practice": self._get_default_result("practice"),
                 "key_terms": self._get_default_result("key_terms"),
-                "summary": self._get_default_result("summary"),
-                "blooms": self._get_default_result("blooms"),
-                "analogies": self._get_default_result("analogies")
+                "analogies": self._get_default_result("analogies"),
+                "blooms": self._get_default_result("blooms")
             }
         
         if not self.api_key:
             raise ValueError("API key is required")
         
-        # Preprocess text if needed
-        processed_text = self._preprocess_text(text) if hasattr(self, '_preprocess_text') else text
-        
         try:
             # Create a session for API calls
             async with aiohttp.ClientSession() as session:
+                # First, extract key concepts, themes, and entities
+                logger.info("Extracting concepts and entities...")
+                extracted_data = await self._extract_concepts_and_entities(session, text)
+                
                 # Generate different types of content
                 results = {
-                    "questions": await self._generate_questions(session, processed_text),
-                    "explanations": await self._generate_explanations(session, processed_text),
-                    "practice": await self._generate_practice_questions(session, processed_text),
-                    "key_terms": await self._generate_key_terms(session, processed_text),
-                    "summary": await self._generate_summary(session, processed_text)
+                    "text": text,
+                    "key_concepts": extracted_data["key_concepts"],
+                    "themes": extracted_data["themes"],
+                    "entities": extracted_data["entities"],
+                    "questions": await self._generate_questions(session, text),
+                    "explanations": await self._generate_explanations(session, text),
+                    "practice": await self._generate_practice_questions(session, text),
+                    "key_terms": await self._generate_key_terms(session, text),
+                    "summary": await self._generate_summary(session, text)
                 }
                 
-                # Try to generate additional content if methods exist
-                try:
-                    results["blooms"] = await self._generate_blooms_questions(session, processed_text)
-                except AttributeError:
-                    results["blooms"] = []
-                    
-                try:
-                    results["analogies"] = await self._generate_analogies(session, processed_text)
-                except AttributeError:
-                    results["analogies"] = []
+                # Generate Bloom's taxonomy questions
+                results["blooms"] = await self._generate_blooms_questions(session, text)
+                
+                # Generate analogies
+                results["analogies"] = await self._generate_analogies(session, text)
                     
                 logger.info("Analysis completed successfully")
+                
                 return results
         except Exception as e:
             logger.error(f"Analysis failed: {str(e)}")
@@ -293,3 +298,77 @@ class PerplexityAnalyzer:
                 await asyncio.sleep(1 * retries)  # Exponential backoff
         
         return None
+
+    async def _extract_concepts_and_entities(self, session: aiohttp.ClientSession, text: str) -> Dict[str, List[str]]:
+        """Extract key concepts, themes, and entities from text"""
+        prompt = f"Extract from this text: 1) 5 key concepts, 2) 3 main themes, 3) important entities (people, places, technologies mentioned). Format as JSON with keys 'key_concepts', 'themes', 'entities', each containing an array of strings:\n\n{text}"
+        
+        result = await self._call_api_with_retry(session, prompt)
+        
+        if not result:
+            return {
+                "key_concepts": [],
+                "themes": [],
+                "entities": []
+            }
+        
+        try:
+            # Try to parse as JSON first
+            if "{" in result and "}" in result:
+                # Extract JSON part if surrounded by other text
+                json_part = result[result.find("{"):result.rfind("}")+1]
+                data = json.loads(json_part)
+                return {
+                    "key_concepts": data.get("key_concepts", []),
+                    "themes": data.get("themes", []),
+                    "entities": data.get("entities", [])
+                }
+            
+            # If not JSON, try to parse structured text
+            concepts = []
+            themes = []
+            entities = []
+            
+            lines = result.split('\n')
+            current_section = None
+            
+            for line in lines:
+                line = line.strip()
+                if not line:
+                    continue
+                    
+                if "key concept" in line.lower() or "key concepts" in line.lower():
+                    current_section = "concepts"
+                    continue
+                elif "theme" in line.lower() or "themes" in line.lower():
+                    current_section = "themes"
+                    continue
+                elif "entit" in line.lower():
+                    current_section = "entities"
+                    continue
+                    
+                # Clean up bullet points and numbering
+                if line.startswith(("- ", "• ", "* ", "1. ", "2. ", "3. ", "4. ", "5. ")):
+                    line = line[2:].strip()
+                    
+                # Add to appropriate list based on current section
+                if current_section == "concepts":
+                    concepts.append(line)
+                elif current_section == "themes":
+                    themes.append(line)
+                elif current_section == "entities":
+                    entities.append(line)
+            
+            return {
+                "key_concepts": concepts[:5],  # Limit to 5
+                "themes": themes[:3],          # Limit to 3
+                "entities": entities[:10]      # Limit to 10
+            }
+            
+        except Exception as e:
+            logger.error(f"Error parsing concepts and entities: {str(e)}")
+            return {
+                "key_concepts": [],
+                "themes": [],
+                "entities": []
+            }

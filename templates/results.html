@@ -9,30 +9,29 @@
     {% endif %}
 
     <!-- Socratic Questions -->
-    <div class="result-section">
-        <h3>Socratic Questions</h3>
-        {% if results.error %}
-            <div class="alert alert-warning">
-                Using default questions. Error: {{ results.error }}
-            </div>
-        {% endif %}
-        {% if results.socratic_questions %}
-            <ul class="socratic-questions">
-            {% for question in results.socratic_questions %}
-                <li>{{ question }}</li>
-            {% endfor %}
-            </ul>
-        {% else %}
-            <p>No Socratic questions available</p>
-        {% endif %}
+    <div class="card mb-4">
+        <div class="card-header">
+            <h2>Socratic Questions</h2>
+        </div>
+        <div class="card-body">
+            {% if results.questions and results.questions|length > 0 %}
+                <ul class="list-group list-group-flush">
+                    {% for question in results.questions %}
+                        <li class="list-group-item">{{ question }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No Socratic questions available</p>
+            {% endif %}
+        </div>
     </div>
 
     <!-- Multi-level Explanations -->
     <div class="result-section">
         <h3>Multi-level Explanations</h3>
-        {% if results.multilevel_explanations %}
+        {% if results.explanations and results.explanations|length > 0 %}
             <ul class="multilevel-explanations">
-            {% for explanation in results.multilevel_explanations %}
+            {% for explanation in results.explanations %}
                 <li>{{ explanation }}</li>
             {% endfor %}
             </ul>
@@ -44,9 +43,9 @@
     <!-- Practice Questions -->
     <div class="result-section">
         <h3>Practice Questions</h3>
-        {% if results.practice_questions %}
+        {% if results.practice and results.practice|length > 0 %}
             <ul class="practice-questions">
-            {% for question in results.practice_questions %}
+            {% for question in results.practice %}
                 <li>{{ question }}</li>
             {% endfor %}
             </ul>
@@ -58,9 +57,9 @@
     <!-- Bloom's Taxonomy Questions -->
     <div class="result-section">
         <h3>Bloom's Taxonomy Questions</h3>
-        {% if results.blooms_questions %}
+        {% if results.blooms and results.blooms|length > 0 %}
             <ul class="blooms-questions">
-            {% for question in results.blooms_questions %}
+            {% for question in results.blooms %}
                 <li>{{ question }}</li>
             {% endfor %}
             </ul>
