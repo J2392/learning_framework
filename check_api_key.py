@@ -37,7 +37,7 @@ def main():
     }
     
     data = {
-        "model": "sonar-medium-chat",
+        "model": "sonar-pro",
         "messages": [
             {
                 "role": "system",

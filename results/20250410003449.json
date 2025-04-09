@@ -1,0 +1,24 @@
+{
+  "text": "Considering the ethical implications of increasingly sophisticated AI in healthcare diagnostics, and factoring in the potential for algorithmic bias to exacerbate existing health disparities, how should regulatory bodies and healthcare institutions collaboratively establish dynamic and adaptive governance frameworks that not only ensure accuracy and patient safety but also actively promote equitable access and outcomes across diverse socioeconomic and demographic populations?\n",
+  "questions": {
+    "error": "type object 'Config' has no attribute 'is_development_mode'"
+  },
+  "explanations": {
+    "error": "type object 'Config' has no attribute 'is_development_mode'"
+  },
+  "practice": {
+    "error": "type object 'Config' has no attribute 'is_development_mode'"
+  },
+  "blooms": {
+    "error": "type object 'Config' has no attribute 'is_development_mode'"
+  },
+  "key_terms": {
+    "error": "'str' object has no attribute 'get'"
+  },
+  "analogies": {
+    "error": "'str' object has no attribute 'get'"
+  },
+  "summary": {
+    "error": "type object 'Config' has no attribute 'is_development_mode'"
+  }
+}

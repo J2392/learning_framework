@@ -28,6 +28,7 @@ from asgiref.wsgi import WsgiToAsgi
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from analyzers.perplexity_analyzer import PerplexityAnalyzer
 from utils.logger import setup_logger
+logger = setup_logger("app", log_dir="logs") # Thêm log_dir
 from config import Config  # Import Config class
 from generators import AVAILABLE_GENERATORS
 from api.routes import api_bp
