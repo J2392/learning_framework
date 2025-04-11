@@ -1,0 +1,60 @@
+{
+  "short": {
+    "generator": "summary",
+    "method_called": "analyze",
+    "text_length": 240,
+    "text_type": "short",
+    "iterations": 2,
+    "times": [
+      7.414817810058594e-05,
+      0.00040602684020996094
+    ],
+    "start_times": [
+      1744349911.5035388,
+      1744349911.6048791
+    ],
+    "end_times": [
+      1744349911.503613,
+      1744349911.6052852
+    ],
+    "avg_time": 0.00024008750915527344,
+    "std_dev": 0.00023467365250865797,
+    "result_types": [
+      "list",
+      "list"
+    ],
+    "result_sizes": [
+      24,
+      24
+    ]
+  },
+  "medium": {
+    "generator": "summary",
+    "method_called": "analyze",
+    "text_length": 533,
+    "text_type": "medium",
+    "iterations": 2,
+    "times": [
+      0.00017881393432617188,
+      0.0004379749298095703
+    ],
+    "start_times": [
+      1744349911.70754,
+      1744349911.808994
+    ],
+    "end_times": [
+      1744349911.7077188,
+      1744349911.809432
+    ],
+    "avg_time": 0.0003083944320678711,
+    "std_dev": 0.00018325449732536724,
+    "result_types": [
+      "list",
+      "list"
+    ],
+    "result_sizes": [
+      24,
+      24
+    ]
+  }
+}

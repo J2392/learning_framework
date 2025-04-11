@@ -1,8 +1,8 @@
-flask
-flask-cors
-aiohttp
-python-dotenv
-httpx
-asgiref
-requests
-uvicorn
+# Main application dependencies
+flask==2.3.3
+python-dotenv==1.0.0
+aiohttp==3.9.1 # For async API calls
+nltk==3.8.1 # For text processing (optional, if used)
+requests==2.31.0 # For simple sync requests
+
+# Add other dependencies as needed

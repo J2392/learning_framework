@@ -1,0 +1,9 @@
+{
+  "method_called": "analyze",
+  "text_length": 240,
+  "cold_time": 0.0002129077911376953,
+  "warm_time": 0.00017213821411132812,
+  "cold_time_after_reset": 0.00018286705017089844,
+  "improvement_factor": 1.236842105263158,
+  "results_equal": true
+}
