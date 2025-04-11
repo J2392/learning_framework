@@ -1,0 +1,69 @@
+{
+  "text_size": "short",
+  "text_length": 240,
+  "iterations": 2,
+  "benchmarks": [
+    {
+      "generator": "summary",
+      "method_called": "analyze",
+      "text_length": 240,
+      "text_type": "short",
+      "iterations": 2,
+      "times": [
+        8.0108642578125e-05,
+        0.0003981590270996094
+      ],
+      "start_times": [
+        1744349911.095327,
+        1744349911.196734
+      ],
+      "end_times": [
+        1744349911.095407,
+        1744349911.197132
+      ],
+      "avg_time": 0.0002391338348388672,
+      "std_dev": 0.00022489558365413055,
+      "result_types": [
+        "list",
+        "list"
+      ],
+      "result_sizes": [
+        24,
+        24
+      ]
+    },
+    {
+      "generator": "key_terms",
+      "method_called": "analyze",
+      "text_length": 240,
+      "text_type": "short",
+      "iterations": 2,
+      "times": [
+        0.00018525123596191406,
+        0.00045013427734375
+      ],
+      "start_times": [
+        1744349911.2993898,
+        1744349911.400992
+      ],
+      "end_times": [
+        1744349911.299575,
+        1744349911.401442
+      ],
+      "avg_time": 0.00031769275665283203,
+      "std_dev": 0.00018730059478241307,
+      "result_types": [
+        "list",
+        "list"
+      ],
+      "result_sizes": [
+        85,
+        85
+      ]
+    }
+  ],
+  "summary": {
+    "summary": 0.0002391338348388672,
+    "key_terms": 0.00031769275665283203
+  }
+}

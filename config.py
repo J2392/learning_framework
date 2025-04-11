@@ -50,7 +50,7 @@ class Config:
     RESULTS_DIR = 'results'
 
     # Add a development mode flag
-    DEVELOPMENT_MODE = False
+    DEVELOPMENT_MODE = os.getenv('DEVELOPMENT_MODE', 'False').lower() == 'true'
     
     @staticmethod
     def init_app(app):

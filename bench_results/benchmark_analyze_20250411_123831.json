@@ -1,0 +1,29 @@
+{
+  "method": "analyze",
+  "text_length": 240,
+  "text_type": "short",
+  "iterations": 2,
+  "times": [
+    8.106231689453125e-05,
+    0.00035881996154785156
+  ],
+  "avg_time": 0.0002199411392211914,
+  "std_dev": 0.00019640431406076618,
+  "result_fields": [
+    "text",
+    "key_concepts",
+    "themes",
+    "entities",
+    "summary",
+    "questions",
+    "explanations",
+    "practice",
+    "key_terms",
+    "analogies",
+    "blooms"
+  ],
+  "result_sizes": [
+    776,
+    776
+  ]
+}
